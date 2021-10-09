@@ -44,7 +44,10 @@ const setSkycons = (id, iconCode) => {
 };
 
 const locationContainer = document.getElementById("location-container");
+const locationSelector = document.getElementById("location-selector");
 const locationInput = document.getElementById("location-input");
+const btnfindMe = document.getElementById("img-location");
+
 const tempNum = document.getElementById("temp-num");
 const tempSymbol = document.getElementById("temp-symbol");
 const weatherDescription = document.getElementById("weather-description");
@@ -62,6 +65,12 @@ const weatherWindDegree = document.getElementById("weather-wind-degree");
 
 var weather;
 
+const ipFinderApi = () => {
+  return "https://checkip.amazonaws.com/";
+};
+const ipLocationApi = (ipString) => {
+  return `http://ip-api.com/json/${ipString}`;
+};
 const weatherApi = (cityName) => {
   const APIKey = "89abe4f04842396e66baf7a1783e43a0";
   return `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${APIKey}&units=metric`;
@@ -115,14 +124,14 @@ const locationInputErrorAnimation = () => {
 };
 const showLocationInput = () => {
   locationContainer.style.display = "none";
-  locationInput.style.display = "unset";
+  locationSelector.style.display = "flex";
   locationInput.value = "";
   locationInput.focus();
 };
 
 const hideLocationInput = () => {
   locationContainer.style.display = "flex";
-  locationInput.style.display = "none";
+  locationSelector.style.display = "none";
 };
 
 locationContainer.onclick = () => {
@@ -135,4 +144,18 @@ locationInput.onkeydown = (e) => {
   } else if (e.key === "Escape") {
     hideLocationInput();
   }
+};
+
+const findMe = async () => {
+  const ipString = await fetch(ipFinderApi()).then((resp) => resp.text());
+  const jsonResponse = await fetch(ipLocationApi(ipString)).then((resp) =>
+    resp.json()
+  );
+  return jsonResponse.city;
+};
+
+btnfindMe.onclick = (e) => {
+  findMe().then((city) => {
+    locationInputChangeHandler(city);
+  });
 };
