@@ -1,0 +1,110 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./Components/skycons.js"></script>
+    <title>Weather</title>
+  </head>
+  <body>
+   
+    <div class="ip glass">
+      <div>
+        Your IP-Address:
+        <span> 2.184.164.78 </span>
+      </div>
+      <div>
+        Continent:
+        <span>Asia(AS)</span>
+      </div>
+      <div>
+        Country:
+        <span>
+          
+        </span>
+        <span>
+          <img
+            src="https://assets.ipstack.com/flags/ir.svg"
+            alt="Iran Flag"
+            style="width: 1rem"
+          />
+        </span>
+        <span>Iran(IR)</span>
+      </div>
+      <div>
+        region:
+        <span>Yazd(25)</span>
+      </div>
+      <div>
+        City:
+        <span>Yazd</span>
+      </div>
+      <div>
+        Zip:
+        <span>N/A</span>
+      </div>
+      <div>
+        Geo-Location:
+        <div>31.904720306396484</div>
+        <div>54.37055969238281</div>
+      </div>
+      <div>
+        Capital:
+        <span>Tehran</span>
+      </div>
+      <div>
+        Languages:
+        <span>Persian(fa) - &#x0641&#x0627&#x0631&#x0633&#x06cc</span>
+      </div>
+      <div>
+        Calling Code:
+        <span>+98</span>
+      </div>
+    </div>
+
+    
+    <div class="weather glass">
+      <div class="country">
+        <input type="text" placeholder="Yazd,Iran" , id="location-input" autocomplete="off">
+        <div id="location-container">
+          <h1 id="location-name">Yazd, Iran</h1>
+          <img id="img-flag" src="https://assets.ipstack.com/flags/ir.svg" alt="">
+        </div>
+      </div>
+      <div class="weather-upper">
+        <div class="temp-container">
+          <div class="temp"><h1 id="temp-num">27</h1>°C</div>
+         
+          <div><span>Feel's Like: <span id="temp-fl">23</span></span></div>
+          <div>
+            <span class="arrow-up">&#9650</span>
+            <span id="temp-min">34</span>
+            <span class="arrow-down">&#9660</span>
+            <span id="temp-max">28</span>
+          </div>
+        </div>
+        <div class="icon">
+          <canvas id="weather-icon"></canvas>
+        </div>
+      </div>
+      <div class="weather-lower">
+        <p id="weather-description">Cloudy | overcast clouds </p>
+      </div>
+      <div class="weather-bottom">
+        <span>Pressure:</br><span id="weather-pressure">1028</span>mb</span>
+        <span>Humidity:</br><span id="weather-humidity">95</span>%</span>
+        <span>Visibility:</br><span id="weather-visibility">10000</span>m</span>
+        
+      </div>
+      <div class="weather-bottom">
+        <span>Wind Speed:</br><span id="weather-wind-speed">1.54</span>m/s</span>
+        <span>Wind degree:</br><span id="weather-wind-degree">0</span>°</span>        
+      </div>
+    </div>
+    <div class="about-me">
+      <p>by Pouya Dehghani</p>
+    </div>
+    <script  src="./app.js"></script>
+  </body>
+</html>
