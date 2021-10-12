@@ -97,7 +97,7 @@ const ipFinderApi = () => {
   return "https://checkip.amazonaws.com/";
 };
 const ipLocationApi = (ipString) => {
-  return `http://ip-api.com/json/${ipString}`;
+  return `./api/ip_location.php?ip=${ipString}`;
 };
 const weatherApi = (cityName) => {
   const APIKey = "89abe4f04842396e66baf7a1783e43a0";
