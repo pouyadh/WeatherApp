@@ -66,8 +66,13 @@
     <div class="weather glass border-half-round">
       <div class="country">
         <div id="location-selector">
-          <input type="text" placeholder="Yazd" , id="location-input" autocomplete="off">
-          <img id="img-location" src="./Images/location.svg" alt="location">
+          <div id="location-input-container">
+            <img src="./Images/search.svg" alt="location">
+            <input type="text" placeholder="your city name for example 'Tehran'" , id="location-input" autocomplete="off">
+            <img id="img-location" src="./Images/location.svg" alt="location">
+          </div>
+          <div id= "location-suggestion"> 
+          </div>
         </div>
         <div id="location-container">
           <h1 id="location-name">Yazd, Iran</h1>

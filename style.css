@@ -104,9 +104,8 @@ body {
 }
 #location-input {
   background: none;
-  background-color: rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 5px;
+  background-color: rgba(0, 0, 0, 0);
+  border: none;
   font-family: sans-serif;
   font-size: 1rem;
   outline: none;
@@ -149,12 +148,29 @@ body {
   font-size: 0.9rem;
 }
 
-/* #location-input {
-  display: none;
-} */
+.location-item * {
+  margin: 0px 10px;
+}
 
+.location-item {
+  display: flex;
+  align-items: center;
+  padding-left: 2.5rem;
+  margin: 10px 0;
+}
+
+.location-cords {
+  font-size: 0.6rem;
+}
+
+#location-suggestion {
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+#location-container {
+  /* display: none; */
+}
 #location-selector img {
-  height: 2rem;
+  height: 1.5rem;
   opacity: 0.7;
 }
 #location-selector img:hover {
@@ -163,8 +179,15 @@ body {
 #location-selector {
   padding: 0 10px;
   width: 100%;
+  display: none;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+  margin: 0 10px;
+  background-color: rgba(0, 0, 0, 0.2);
+}
+#location-input-container {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  display: none;
+  width: 100%;
 }
