@@ -1,9 +1,6 @@
 <?php
 
-
-
-
-function CallAPI($method, $url, $data = false)
+function CallAPI($method, $url, $data = null)
 {
     $curl = curl_init();
 
