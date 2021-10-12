@@ -10,7 +10,7 @@ body {
   justify-content: center;
   flex-direction: column;
   align-items: center;
-  background: url("./Images/Mountain\ 06.jpg");
+  background: url("../Images/Mountain\ 06.jpg");
   background-size: cover;
   font-family: sans-serif;
   color: white;
