@@ -1,12 +1,12 @@
 var citiesData = null;
 var statesData = null;
 const downloadCities = () => {
-  return fetch("./Data/cities.json")
+  return fetch("../Data/cities.json")
     .then((resp) => resp.json())
     .then((data) => data);
 };
 const downloadStates = () => {
-  return fetch("./Data/states.json")
+  return fetch("../Data/states.json")
     .then((resp) => resp.json())
     .then((data) => data);
 };
@@ -97,7 +97,7 @@ const ipFinderApi = () => {
   return "https://checkip.amazonaws.com/";
 };
 const ipLocationApi = (ipString) => {
-  return `./api/ip_location.php?ip=${ipString}`;
+  return `../api/ip_location.php?ip=${ipString}`;
 };
 const weatherApi = (cityName) => {
   const APIKey = "89abe4f04842396e66baf7a1783e43a0";
