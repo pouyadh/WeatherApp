@@ -94,7 +94,7 @@ const countryFlagUrl = (countryCode) => {
 };
 
 const ipFinderApi = () => {
-  return "https://checkip.amazonaws.com/";
+  return "https://api.ipify.org";
 };
 const ipLocationApi = (ipString) => {
   return `../api/ip_location.php?ip=${ipString}`;
