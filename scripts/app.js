@@ -64,6 +64,9 @@ const weatherWindSpeed = document.getElementById("weather-wind-speed");
 const weatherWindDegree = document.getElementById("weather-wind-degree");
 
 const locationSuggestion = document.getElementById("location-suggestion");
+const locationSearchSpinner = document.getElementById(
+  "location-search-spinner"
+);
 
 const weatherContainer = document.getElementById("weather-container");
 
@@ -207,11 +210,13 @@ locationInput.onkeyup = () => {
     clearTimeout(searcher);
   }
   searcher = setTimeout(() => {
+    locationSearchSpinner.style.display = "unset";
     fetch(suggestLocationApi(str))
       .then((resp) => resp.json())
       .then((data) => {
         updateLocationSearchSuggestion(data);
         searcher = null;
+        locationSearchSpinner.style.display = "none";
       });
   }, 500);
 };

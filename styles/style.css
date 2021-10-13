@@ -159,6 +159,7 @@ body {
   margin: 10px 0;
   cursor: pointer;
   border-radius: 5px;
+  padding: 5px 0;
 }
 
 .location-item:hover {
@@ -209,6 +210,10 @@ body {
   align-items: center;
 }
 
+#location-search-spinner {
+  display: none;
+}
+
 :root {
   --s-loader-wrapper-bg-color: rgb(21, 22, 43);
   --s-loader-width: 50px;
@@ -231,6 +236,20 @@ body {
   position: relative;
 }
 
+.spinning-loader-small {
+  width: 20px;
+  height: 20px;
+  border: 5px solid var(--s-loader-border-color-trans);
+  border-left-color: var(--s-loader-border-color-full);
+  border-radius: 50%;
+  background: transparent;
+  animation-name: rotate-s-loader;
+  animation-iteration-count: infinite;
+  animation-duration: 1s;
+  animation-timing-function: linear;
+  position: relative;
+}
+
 @keyframes rotate-s-loader {
   from {
     transform: rotate(0);
@@ -238,4 +257,13 @@ body {
   to {
     transform: rotate(360deg);
   }
+}
+
+.country {
+  transition: all 0.5s ease;
+}
+
+.country:hover {
+  border-radius: 10px;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
 }
