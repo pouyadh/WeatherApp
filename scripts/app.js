@@ -1,25 +1,3 @@
-var citiesData = null;
-var statesData = null;
-const downloadCities = () => {
-  return fetch("../Data/cities.json")
-    .then((resp) => resp.json())
-    .then((data) => data);
-};
-const downloadStates = () => {
-  return fetch("../Data/states.json")
-    .then((resp) => resp.json())
-    .then((data) => data);
-};
-
-const downloadData = async () => {
-  const cities = await downloadCities();
-  const states = await downloadStates();
-  citiesData = cities;
-  statesData = states;
-};
-
-downloadData();
-
 var skycons = new Skycons({ color: "white" });
 skycons.add("weather-icon", Skycons.PARTLY_CLOUDY_DAY);
 skycons.play();
@@ -87,6 +65,10 @@ const weatherWindDegree = document.getElementById("weather-wind-degree");
 
 const locationSuggestion = document.getElementById("location-suggestion");
 
+const weatherContainer = document.getElementById("weather-container");
+
+const loading = document.getElementById("loading");
+
 var weather;
 
 const countryFlagUrl = (countryCode) => {
@@ -106,6 +88,10 @@ const weatherApi = (cityName) => {
 const weatherApiGeo = (lat, lon) => {
   const APIKey = "89abe4f04842396e66baf7a1783e43a0";
   return `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${APIKey}&units=metric`;
+};
+
+const suggestLocationApi = (query) => {
+  return `../api/suggest_location.php?q=${query}`;
 };
 
 const updateWeather = () => {
@@ -155,14 +141,14 @@ const locationInputErrorAnimation = () => {
   }, 500);
 };
 const showLocationInput = () => {
-  locationContainer.style.display = "none";
+  weatherContainer.style.display = "none";
   locationSelector.style.display = "unset";
   locationInput.value = "";
   locationInput.focus();
 };
 
 const hideLocationInput = () => {
-  locationContainer.style.display = "flex";
+  weatherContainer.style.display = "unset";
   locationSelector.style.display = "none";
   locationSuggestion.innerHTML = "";
 };
@@ -191,50 +177,24 @@ btnfindMe.onclick = (e) => {
   });
 };
 
-const getStateById = (id) => {
-  return statesData.find((state) => state.id === id);
-};
-
 const locationItemEventHandler = (target) => {
-  const cityId = +target.getAttribute("data-city-id");
-  const cityItem = citiesData.find((city) => city.id === cityId);
-  const stateItem = getStateById(cityItem.state_id);
+  const data = locationSuggestion.suggestions;
+  const cityId = +target.getAttribute("data-id");
+  const cityItem = data.find((item) => item.id === cityId);
   updateLocation(cityItem.latitude, cityItem.longitude);
 };
 
 const updateLocationSearchSuggestion = (suggestions) => {
   const createLocationItem = (item) => {
-    const { id, country_code, name, state_id, latitude, longitude } = item;
-    const state_name = getStateById(state_id).name;
-    return `<div class="location-item" data-city-id="${id}" onclick="locationItemEventHandler(this)">
+    const { id, country_code, name, state_name, latitude, longitude } = item;
+    return `<div class="location-item" data-id="${id}" onclick="locationItemEventHandler(this)">
     <img src="${countryFlagUrl(country_code)}" alt="flag">
     <span>${name}, ${state_name}, ${country_code}</br><span class="location-cords">@ ${latitude} , ${longitude}</span></span>
   </div>`;
   };
   const elements = suggestions.map((item) => createLocationItem(item)).join("");
   locationSuggestion.innerHTML = elements;
-};
-
-const serachInCities = (str) => {
-  const temp = str.split("");
-  temp[0] = temp[0].toUpperCase();
-  str = temp.join("");
-  const result = [];
-  for (let i = 0; i < citiesData.length; i++) {
-    if (result.length === 5) break;
-    if (citiesData[i].name === str) {
-      result.push(citiesData[i]);
-    }
-  }
-  for (let i = 0; i < citiesData.length; i++) {
-    if (result.length === 5) break;
-    if (citiesData[i].name.includes(str)) {
-      if (!result.includes(citiesData[i])) {
-        result.push(citiesData[i]);
-      }
-    }
-  }
-  return result;
+  locationSuggestion.suggestions = suggestions;
 };
 
 var searcher = null;
@@ -242,17 +202,27 @@ var isSearchInCitiesDumpAllowed = false;
 
 locationInput.onkeyup = () => {
   const str = locationInput.value;
-  if (citiesData == null || str.length < 2) return;
+  if (str.length < 2) return;
   if (searcher != null) {
     clearTimeout(searcher);
   }
   searcher = setTimeout(() => {
-    const suggestedCities = serachInCities(str);
-    updateLocationSearchSuggestion(suggestedCities);
-    searcher = null;
+    fetch(suggestLocationApi(str))
+      .then((resp) => resp.json())
+      .then((data) => {
+        updateLocationSearchSuggestion(data);
+        searcher = null;
+      });
   }, 500);
 };
 
-findMe().then((location) => {
-  updateLocation(location.lat, location.lon);
+const load = async () => {
+  await findMe().then((location) => {
+    updateLocation(location.lat, location.lon);
+  });
+};
+
+load().then(() => {
+  loading.style.display = "none";
+  weatherContainer.style.display = "unset";
 });
