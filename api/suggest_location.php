@@ -19,7 +19,9 @@ if ($_GET["q"]) {
     foreach ($cities as $city) {
         if (count($result) === 5 ) break;
         if (strpos($city["name"],$query) !== false) {
-            $result[] = $city;
+            if (!in_array($city,$result)) {
+                $result[] = $city;
+            }
         }
     }
     foreach ($states as $state) {
