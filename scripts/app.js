@@ -179,11 +179,9 @@ locationInput.onkeydown = (e) => {
 
 const findMe = async () => {
   const ipString = await fetch(ipFinderApi()).then((resp) => resp.text());
-  console.log(ipString);
   const jsonResponse = await fetch(ipLocationApi(ipString)).then((resp) =>
     resp.json()
   );
-  console.log(jsonResponse);
   return jsonResponse;
 };
 
