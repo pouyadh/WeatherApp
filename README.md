@@ -1,5 +1,6 @@
 # WeatherApp
 
+Check it out! -> weather.pouyadh.ir
 it's simple web application to check the weather status of a location
 
 it uses basic stuff (HTML/CSS/Vanilla Javascript)
