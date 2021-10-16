@@ -1,39 +1,62 @@
 <?php
 
-if ($_GET["q"]) {
-    $query = $_GET["q"];
-    $citiesJSON = file_get_contents("../Data/cities.json");
-    $statesJSON = file_get_contents("../Data/states.json");
-    $cities = json_decode($citiesJSON,true);
-    $states = json_decode($statesJSON,true);
-    $query = strtolower($query);
-    $query = ucfirst($query);
-    $result = [];
-    
-    foreach ($cities as $city) {
-        if (count($result) === 5 ) break;
-        if ($city["name"] === $query) {
-            $result[] = $city;
-        }
-    }
-    foreach ($cities as $city) {
-        if (count($result) === 5 ) break;
-        if (strpos($city["name"],$query) !== false) {
-            if (!in_array($city,$result)) {
-                $result[] = $city;
-            }
-        }
-    }
-    foreach ($states as $state) {
-        foreach ($result as &$city) {
-            if ($state["id"] === $city["state_id"]) {
-                $city["state_name"] = $state["name"];
-            }
-        }
-    }
-    $result = json_encode($result);
+require './config.php';
+
+
+function prepareHeader($json) {
     header_remove("Set-Cookie");
     header("Content-Type: application/json");
     header("HTTP/1.1 200 OK");
-    echo $result;
+    echo $json;
 }
+
+function dieWithEmptyJsonResponse() {
+    $resp = json_encode([]);
+    prepareHeader($resp);
+    exit;
+}
+if (!$_GET["q"]) {
+    dieWithEmptyJsonResponse();
+}
+if (strlen($_GET["q"]) < 3) {
+    dieWithEmptyJsonResponse();
+}
+$query = $_GET["q"];
+$query = strtolower($query);
+$query = ucfirst($query);
+
+$sql = 
+"SELECT c.*, s.name as state_name FROM cities c
+LEFT JOIN states s ON c.state_id = s.id
+WHERE c.name = :q1
+UNION
+SELECT c.*, s.name as state_name FROM cities c
+LEFT JOIN states s ON c.state_id = s.id
+WHERE c.name LIKE :q2
+LIMIT 5;";
+
+
+$dsn = "mysql:host={$dbHost};dbname={$dbName}";
+$pdo = new PDO($dsn,$dbUsername,$dbPassword);
+
+
+try {
+    $pdo->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindValue(':q1',$query);
+    $stmt->bindValue(':q2',"%{$query}%");
+    $stmt->execute();
+    $result1 = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $json = json_encode($result1);
+
+} catch(PDOException $e) {
+    $resp = [
+        "error" => true,
+        "error_message" => $e->getMessage()
+    ];
+    $json = json_encode($resp);
+} finally {
+    $pdo = null;
+    prepareHeader($json);
+}
+?>
