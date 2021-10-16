@@ -182,7 +182,7 @@ btnfindMe.onclick = (e) => {
 
 const locationItemEventHandler = (target) => {
   const data = locationSuggestion.suggestions;
-  const cityId = +target.getAttribute("data-id");
+  const cityId = target.getAttribute("data-id");
   const cityItem = data.find((item) => item.id === cityId);
   updateLocation(cityItem.latitude, cityItem.longitude);
 };
@@ -200,24 +200,34 @@ const updateLocationSearchSuggestion = (suggestions) => {
   locationSuggestion.suggestions = suggestions;
 };
 
-var searcher = null;
-var isSearchInCitiesDumpAllowed = false;
+const showLocationSearchSpinner = () => {
+  locationSearchSpinner.style.display = "unset";
+};
+
+const hideLocationSearchSpinner = () => {
+  locationSearchSpinner.style.display = "none";
+};
+
+const suggestLocation = (str) => {
+  return fetch(suggestLocationApi(str)).then((resp) => resp.json());
+};
+
+var searchTimeout = null;
 
 locationInput.onkeyup = () => {
   const str = locationInput.value;
-  if (str.length < 2) return;
-  if (searcher != null) {
-    clearTimeout(searcher);
+  if (searchTimeout != null) {
+    clearTimeout(searchTimeout);
+    searchTimeout = null;
   }
-  searcher = setTimeout(() => {
-    locationSearchSpinner.style.display = "unset";
-    fetch(suggestLocationApi(str))
-      .then((resp) => resp.json())
-      .then((data) => {
-        updateLocationSearchSuggestion(data);
-        searcher = null;
-        locationSearchSpinner.style.display = "none";
-      });
+  searchTimeout = setTimeout(() => {
+    showLocationSearchSpinner();
+    suggestLocation(str).then((suggestions) => {
+      updateLocationSearchSuggestion(suggestions);
+
+      searchTimeout = null;
+      hideLocationSearchSpinner();
+    });
   }, 500);
 };
 
